@@ -1,0 +1,7 @@
+node_modules/
+build/
+
+#  Licensed typefaces. Px Grotesk comes from the private typeface repo via
+#  `pnpm fonts`; Berkeley Mono has to be supplied by hand. Never commit either:
+#  this repository is public.
+fonts/
