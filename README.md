@@ -15,21 +15,24 @@ Five rounds are preserved, oldest to newest. Round 5 is current.
 | `src/` | the generator |
 | `site/` | the built static gallery, committed and served as-is |
 | `exports/` | the canonical mark and its small-size cut as clean, reusable SVG |
-| `scripts/` | font fetching and the full build |
-| `fonts/` | gitignored. Licensed typefaces, never committed |
+| `scripts/` | the full build, and the one-off font derivation |
+| `fonts/` | the typefaces, committed |
 | `build/` | gitignored. Throwaway rasters |
 
 ## Running it
 
 ```sh
 pnpm install
-pnpm fonts     # needs GITHUB_TOKEN with read access to the private typeface repo
 pnpm build     # regenerates build/ and site/
 ```
 
-Berkeley Mono cannot be fetched and must be supplied by hand as a variable `.woff2`, then instanced to static weights. Px Grotesk Mono Bold is trial-only until the licence is bought.
+That is everything. The typefaces are in `fonts/`, so there is no fetch step and no token.
 
-Without the fonts the icon sheets still render, but every specimen and label falls back. `src/fontguard.mjs` will throw rather than let that happen silently.
+`fonts/` holds Berkeley Mono as its variable source plus eight static cuts, and `fonts/px/` holds the Px Grotesk set. Both are licensed retail faces and Px Grotesk Mono Bold is trial-only until the licence is bought. The static Berkeley cuts and the Px Grotesk Screen name fix are derived by `scripts/prepare-fonts.py`, whose outputs are committed; run it only when a weight changes.
+
+Round 2's type studies are set in Archivo and Martian Mono as labelled stand-ins, from the round before Px Grotesk was reachable. Those two are not in the repo, so rebuilding on a machine without them re-renders round 2's labels in the fallback face. Leave those sheets as committed.
+
+`src/fontguard.mjs` throws when a requested face silently falls back, so a specimen can never lie about which typeface it shows.
 
 ## Using the output
 

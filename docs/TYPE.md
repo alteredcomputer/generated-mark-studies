@@ -6,11 +6,13 @@
 
 Berkeley Mono is retained for website copy. It is rounder, more even, and more conventional; it reads as an excellent code-editor face. Px Grotesk Mono is squarer and more machined, with a hard angled flag on the `r`, a flatter `t` and a straighter tail on the `a`. That matches the brutalist direction.
 
-**Licensing:** the repo's full licence covers Px Grotesk Regular/Bold and Px Grotesk Mono **Regular**. The **Mono Bold is trial-only**. The operator will buy the licence once the designs are finalised; trial use is acceptable during design.
+**Licensing:** the full licence covers Px Grotesk Regular/Bold and Px Grotesk Mono **Regular**. The **Mono Bold is trial-only**. The operator will buy the licence once the designs are finalised; trial use is acceptable during design.
+
+Both families are committed to this repository in `fonts/`, on the operator's instruction. See `PIPELINE.md` for what is there and how the static cuts are derived.
 
 ## Available faces
 
-From `inducingchaos/riley-barabash` at `public/shared/typefaces/`:
+Originally from `inducingchaos/riley-barabash` at `public/shared/typefaces/`, now vendored into `fonts/px/`:
 
 | Directory | Contents |
 | --- | --- |
@@ -22,7 +24,7 @@ From `inducingchaos/riley-barabash` at `public/shared/typefaces/`:
 | `px-grotesk-screen-trial` | `regular.otf` |
 | also present | `geist`, `geist-mono`, `hoefler-text`, `saans` |
 
-Berkeley Mono was supplied directly as a variable `.woff2`: axes `wght` 100-900, `wdth` 60-100, `slnt` -16-0.
+Berkeley Mono was supplied directly as a variable `.woff2`: axes `wght` 100-900, `wdth` 60-100, `slnt` -16-0. It is committed at `fonts/berkeley-mono-variable.woff2` with eight static cuts beside it, six weights at full width plus Bold and Black at `wdth` 80.
 
 ## Metrics
 

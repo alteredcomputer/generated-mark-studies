@@ -38,12 +38,18 @@ Practical notes for downstream use:
 
 ```sh
 pnpm install
-pnpm fonts        # needs GITHUB_TOKEN; Berkeley Mono must be added by hand
 pnpm build        # regenerates build/ and site/
 ```
 
 `build/` is throwaway and gitignored. `site/` is committed, because Vercel serves it
-directly with no build step.
+directly with no build step: `vercel.json` stubs out the install and build commands so a
+deploy is a file copy. Without that stub Vercel finds the `build` script and runs the
+generator on its own machine, which has none of the system fonts, and every label in the
+gallery would be re-rendered in a fallback face.
+
+Rounds 1, 3, 4 and 5 rebuild byte-for-byte identical to what is committed. Round 2 does
+not, because its type studies use Archivo and Martian Mono as labelled stand-ins and those
+two are not in `fonts/`.
 
 ## The font fallback trap
 
@@ -56,10 +62,29 @@ Two causes, both worth knowing:
 
 `fontguard.mjs` fingerprints a render of each requested family/weight and compares it to a render of a deliberately missing family. Identical hash means fallback, and the build throws. Always run it before producing a specimen sheet.
 
-## Font preparation
+Every module that sets type now asserts its own cast: round 5 always did, and rounds 4 and the type sheets were added after a deploy rebuilt them silently in JetBrains Mono.
 
-Variable fonts must be instanced to static faces before use; `resvg` does not honour variation axes. `fontTools` handles this:
+## The fonts
 
-- `instancer.instantiateVariableFont(font, {"wght": 700, "wdth": 100, "slnt": 0})`
-- Then set `OS/2.usWeightClass` and rewrite name IDs 1/2/4/6 so each instance is addressable by family + weight.
-- `woff2` inputs need `flavor = None` before saving as `ttf`.
+`fonts/` is committed, so a clone renders every specimen with no token and no font hunt.
+
+| Path | What it is |
+| --- | --- |
+| `fonts/berkeley-mono-variable.woff2` | the source Berkeley Mono, axes `wght` 100-900, `wdth` 60-100, `slnt` -16-0 |
+| `fonts/BerkeleyMono-*.ttf` | six static weights, 400 to 900, `wdth` 100 |
+| `fonts/BerkeleyMonoCond-*.ttf` | Bold and Black at `wdth` 80, the source's own Condensed instance |
+| `fonts/px/*.otf` | the Px Grotesk set: full-licence Regular and Bold, full-licence Mono Regular, Screen, and the trial cuts |
+
+The `.ttf` cuts and the Screen name fix are produced by `scripts/prepare-fonts.py`, which needs `pip install fonttools brotli`. It is idempotent and its outputs are committed, so it is a one-off rather than a build step. It is Python because fontTools is the only instancer available; the generator stays pure ES modules.
+
+Three things it handles, each a trap that has already cost a render:
+
+- **Variable axes are ignored by `resvg`,** so every weight a sheet asks for has to exist as its own file. `instancer.instantiateVariableFont(font, {"wght": 700, "wdth": 100, "slnt": 0})`, then set `OS/2.usWeightClass` and rewrite name IDs 1/2/4/6 so the face is addressable by family plus weight.
+- **A condensed cut needs its own family name.** fontdb keys on family plus weight, so a `wdth` 80 face at weight 700 would collide with the normal 700. Hence `Berkeley Mono Cond` rather than a width axis.
+- **Name IDs 16/17 shadow ID 1.** They are dropped on every derived face. Px Grotesk Screen shipped with 16/17 set to `Px Grotesk` / `Screen`, so requesting `Px Grotesk Screen` matched nothing at all.
+
+`woff2` inputs need `flavor = None` before saving as `ttf`, or the file stays compressed and `resvg` will not read it out of a font directory.
+
+Two faces the sheets use are not in `fonts/`: JetBrains Mono, the UI face for every label, comes from system fonts, and round 2's Archivo and Martian Mono stand-ins are not vendored. `assertFaces` skips JetBrains Mono for that reason.
+
+Px Grotesk Screen ships as a single cut with `usWeightClass` 800. Requests for Screen 400 and Screen 800 both resolve to that one file, which is correct, not a fallback.

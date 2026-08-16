@@ -24,15 +24,19 @@ Operating rules for agents working in `usealtered/generated-mark-studies`. Read 
 
 - Reads are permitted. Deployment happens automatically when you push to this repository.
 
-- `site/` is committed and served as-is. `vercel.json` sets `outputDirectory` to `site`; there is no build step on deploy. If a change needs to appear on the live gallery, regenerate `site/` locally with `pnpm build` and commit the result.
+- `site/` is committed and served as-is. `vercel.json` sets `outputDirectory` to `site` and stubs out both the install and build commands, so a deploy is a file copy and cannot fail on a toolchain problem. If a change needs to appear on the live gallery, regenerate `site/` locally with `pnpm build` and commit the result.
 
-# Licensed Fonts
+- Leave those stubs alone. A `build` script in `package.json` is enough for Vercel to run it on deploy unless it is overridden, and a deploy-time rebuild would re-render the reviewed sheets on a machine with different fonts.
 
-- **This repository is public.** Never commit font binaries. Px Grotesk and Berkeley Mono are both licensed, and Px Grotesk Mono Bold is currently trial-only.
+# Fonts
 
-- `fonts/` is gitignored. `pnpm fonts` fetches the Px Grotesk set from the private typeface repo using `GITHUB_TOKEN`. Berkeley Mono has to be supplied by hand.
+- **`fonts/` is committed.** Px Grotesk and Berkeley Mono live in the repository as ordinary files, on the operator's explicit instruction. Nothing is fetched at build time and no token is needed: `pnpm install && pnpm build` is the whole story.
 
-- Rendered specimens (PNG sheets showing text set in these faces) are fine to commit. Font files are not.
+- **This repository is public, and both faces are licensed.** Px Grotesk Mono Bold is still trial-only. Committing them was a deliberate trade of licence exposure for a build that works from a clean clone. Do not widen it: no new licensed face goes in without the operator saying so.
+
+- Static faces are derived, not hand-made. `python3 scripts/prepare-fonts.py` cuts Berkeley Mono's variable file into the eight static instances the sheets ask for and flattens the Px Grotesk Screen name table. Its outputs are committed as well, so the script is a one-off, not a build step.
+
+- Change a weight or an axis value in that script, never a font file by hand.
 
 # The Work
 

@@ -17,12 +17,12 @@ The mark is in refinement, not finished. The thesis, the grid, and most paramete
 
 ## Live gallery
 
-Five rounds of studies, deployed from a scratch directory (not from this repo):
+Five rounds of studies, deployed from this repository:
 
-- <https://altered-mark-studies.vercel.app/1/> through `/5/`
+- <https://generated-mark-studies.vercel.app/1/> through `/5/`
 - Round 5 is the current one. Round 1 is preserved because the operator liked the layout and wants the eventual landing page to look like it.
 
-The gallery is deployed from this repository. `site/` is committed and served as-is.
+`site/` is committed and served as-is, so a deploy copies files and runs nothing. The earlier `altered-mark-studies.vercel.app` was deployed from a scratch directory outside any repository and is superseded.
 
 ## Hard constraints carried through every round
 
