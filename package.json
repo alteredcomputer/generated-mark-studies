@@ -5,7 +5,6 @@
   "type": "module",
   "description": "Brand mark and wordmark studies for ALTERED. Every study is generated from geometry, not drawn.",
   "scripts": {
-    "fonts": "node scripts/fetch-fonts.mjs",
     "build": "node scripts/build-all.mjs",
     "clean": "rm -rf build"
   },

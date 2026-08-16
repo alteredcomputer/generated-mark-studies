@@ -5,8 +5,8 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 
 const ROOT = resolve(HERE, "..")
 
-//  Licensed typefaces are gitignored. `pnpm fonts` fetches the Px Grotesk set from
-//  the private typeface repo; Berkeley Mono has to be dropped in by hand.
+//  Committed, so a clone renders every specimen with no token and no font hunt.
+//  Berkeley Mono statics sit at the top level, the Px Grotesk set in fonts/px.
 const FONTS = resolve(ROOT, "fonts")
 
 //  Rasterised sheets and per-mark SVGs, regenerated on every build.
