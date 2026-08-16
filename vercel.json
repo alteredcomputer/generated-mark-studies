@@ -1,4 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "site"
+  "outputDirectory": "site",
+  "installCommand": "echo 'nothing to install: site/ is served as-is'",
+  "buildCommand": "echo 'nothing to build: site/ is committed'"
 }
