@@ -3,18 +3,16 @@ import { Resvg } from "@resvg/resvg-js"
 
 import { marks } from "./marks-r4.mjs"
 import { SCHEMES, renderMark } from "./render.mjs"
+import { FONT, assertFaces } from "./fontguard.mjs"
 
-import { FONTS, sheets } from "./paths.mjs"
+import { sheets } from "./paths.mjs"
 
-const FONTS_PX = `${FONTS}/px`
 const SHEETS4 = sheets(4)
 
 const D = SCHEMES.dark
 const L = SCHEMES.light
 
 const UI = "JetBrains Mono"
-
-const FONT = { fontDirs: [FONTS, FONTS_PX, "/usr/share/fonts"], defaultFontFamily: UI, loadSystemFonts: true }
 
 const write = (name, svg, width = 1080) => {
     const out = new Resvg(svg, { fitTo: { mode: "width", value: width }, font: FONT }).render()
@@ -53,6 +51,21 @@ const CANDIDATES = [
     { family: "Px Grotesk Screen", weight: 800, label: "Px Grotesk Screen" },
     { family: "JetBrains Mono", weight: 700, label: "JetBrains Mono Bold -- the placeholder" }
 ]
+
+const PX_FAMILY = [
+    { family: "Px Grotesk Mono Trial", weight: 300, label: "Mono Light 300" },
+    { family: "Px Grotesk Mono Trial", weight: 400, label: "Mono Regular 400" },
+    { family: "Px Grotesk Mono Trial", weight: 700, label: "Mono Bold 700" },
+    { family: "Px Grotesk Trial", weight: 300, label: "Light 300" },
+    { family: "Px Grotesk Trial", weight: 400, label: "Regular 400" },
+    { family: "Px Grotesk Trial", weight: 700, label: "Bold 700" },
+    { family: "Px Grotesk Trial", weight: 900, label: "Black 900" },
+    { family: "Px Grotesk Screen", weight: 800, label: "Screen 800" }
+]
+
+//  Every row here is labelled with the face it claims to be, so a fallback would
+//  be a lie rather than a cosmetic glitch. The whole cast is checked up front.
+assertFaces([...CANDIDATES, ...PX_FAMILY].map(c => [c.family, c.weight]))
 
 const showdown = () => {
     const parts = header("TYPEFACE SHOWDOWN", "one word, matched cap height (0.68 em across all of them), alternating polarity.")
@@ -127,18 +140,7 @@ const pxWeights = () => {
 
     let y = 100
 
-    const rows = [
-        { family: "Px Grotesk Mono Trial", weight: 300, label: "Mono Light 300" },
-        { family: "Px Grotesk Mono Trial", weight: 400, label: "Mono Regular 400" },
-        { family: "Px Grotesk Mono Trial", weight: 700, label: "Mono Bold 700" },
-        { family: "Px Grotesk Trial", weight: 300, label: "Light 300" },
-        { family: "Px Grotesk Trial", weight: 400, label: "Regular 400" },
-        { family: "Px Grotesk Trial", weight: 700, label: "Bold 700" },
-        { family: "Px Grotesk Trial", weight: 900, label: "Black 900" },
-        { family: "Px Grotesk Screen", weight: 800, label: "Screen 800" }
-    ]
-
-    rows.forEach((r, i) => {
+    PX_FAMILY.forEach((r, i) => {
         const light = i % 2 === 1
         const tones = light ? L : D
 

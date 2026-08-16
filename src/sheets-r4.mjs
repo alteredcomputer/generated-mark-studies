@@ -3,8 +3,9 @@ import { Resvg } from "@resvg/resvg-js"
 
 import { marks, FAMILIES } from "./marks-r4.mjs"
 import { SCHEMES, renderMark, standalone } from "./render.mjs"
+import { FONT, assertFaces } from "./fontguard.mjs"
 
-import { FONTS, sheets, svgs } from "./paths.mjs"
+import { sheets, svgs } from "./paths.mjs"
 
 const SHEETS4 = sheets(4)
 const SVGS4 = svgs(4)
@@ -14,8 +15,7 @@ const L = SCHEMES.light
 
 const UI = "JetBrains Mono"
 const BM = "Berkeley Mono"
-
-const FONT = { fontDirs: [FONTS, "/usr/share/fonts"], defaultFontFamily: UI, loadSystemFonts: true }
+const COND = "Berkeley Mono Cond"
 
 const rasterize = (svg, width) => {
     const out = new Resvg(svg, { fitTo: { mode: "width", value: width }, font: FONT }).render()
@@ -148,6 +148,10 @@ const WEIGHTS = [
     [900, "Black"]
 ]
 
+//  These sheets are pure specimens: a fallback face would still produce a
+//  plausible-looking row under a label naming a typeface it is not.
+assertFaces([...WEIGHTS.map(([w]) => [BM, w]), [COND, 700], [COND, 900]])
+
 const typeSheet = () => {
     const parts = header("BERKELEY MONO / WEIGHTS", "the real font, six weights, stacked lockup with the leading period you preferred.")
 
@@ -186,8 +190,8 @@ const trackingSheet = () => {
         { fam: BM, w: 700, tr: 8, label: "Bold / +8" },
         { fam: BM, w: 900, tr: 0, label: "Black / 0" },
         { fam: BM, w: 900, tr: 4, label: "Black / +4" },
-        { fam: "Berkeley Mono Cond", w: 700, tr: 0, label: "Condensed Bold / 0" },
-        { fam: "Berkeley Mono Cond", w: 900, tr: 2, label: "Condensed Black / +2" }
+        { fam: COND, w: 700, tr: 0, label: "Condensed Bold / 0" },
+        { fam: COND, w: 900, tr: 2, label: "Condensed Black / +2" }
     ]
 
     rows.forEach((row, i) => {
