@@ -5,7 +5,9 @@ import { FONTS } from "./paths.mjs"
 
 const FONTS_PX = `${FONTS}/px`
 
-const FONT_DIRS = [FONTS, FONTS_PX, "/usr/share/fonts"]
+//  JetBrains Mono is vendored because it is the label face and the fallback: a
+//  machine without it renders every label in whatever default it has.
+const FONT_DIRS = [FONTS, FONTS_PX, `${FONTS}/geist-mono`, `${FONTS}/jetbrains-mono`, "/usr/share/fonts"]
 
 const FONT = { fontDirs: FONT_DIRS, defaultFontFamily: "JetBrains Mono", loadSystemFonts: true }
 
