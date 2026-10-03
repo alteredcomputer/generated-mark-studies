@@ -1,63 +1,70 @@
 # Typography
 
-## Decision
+## Decision: reopened in round six
 
-**Px Grotesk Mono Bold** for the logotype. Confirmed by the operator after a direct comparison against Berkeley Mono.
+Round five recorded Px Grotesk Mono Bold as the logotype. The operator's favourite lockup of all time, though, is X1 with **Berkeley Mono Bold** (round four). The choice is now made from side-by-side lockups with identical construction, which round six provides for:
 
-Berkeley Mono is retained for website copy. It is rounder, more even, and more conventional; it reads as an excellent code-editor face. Px Grotesk Mono is squarer and more machined, with a hard angled flag on the `r`, a flatter `t` and a straighter tail on the `a`. That matches the brutalist direction.
+| Face | Weight | Tracking | Status |
+| --- | --- | --- | --- |
+| Berkeley Mono | Bold 700 (over Medium 500) | 0 | favourite so far |
+| Geist Mono | Medium 500 or Bold 700 | 0 | operator "really loving" it; added in round six |
+| Px Grotesk Mono | Bold 700 | 0 | original wordmark face; Bold is trial-only |
 
-**Licensing:** the full licence covers Px Grotesk Regular/Bold and Px Grotesk Mono **Regular**. The **Mono Bold is trial-only**. The operator will buy the licence once the designs are finalised; trial use is acceptable during design.
+Other roles, settled:
 
-Both families are committed to this repository in `fonts/`, on the operator's instruction. See `PIPELINE.md` for what is there and how the static cuts are derived.
-
-## Available faces
-
-Originally from `inducingchaos/riley-barabash` at `public/shared/typefaces/`, now vendored into `fonts/px/`:
-
-| Directory | Contents |
-| --- | --- |
-| `px-grotesk` | `regular.otf`, `bold.otf` (full licence), `light.woff2` |
-| `px-grotesk-trial` | thin, light, regular, bold, black, each with an italic |
-| `px-grotesk-mono` | `regular.otf` (full licence) |
-| `px-grotesk-mono-trial` | light, regular, bold, each with an italic |
-| `px-grotesk-screen` | `regular.otf` |
-| `px-grotesk-screen-trial` | `regular.otf` |
-| also present | `geist`, `geist-mono`, `hoefler-text`, `saans` |
-
-Berkeley Mono was supplied directly as a variable `.woff2`: axes `wght` 100-900, `wdth` 60-100, `slnt` -16-0. It is committed at `fonts/berkeley-mono-variable.woff2` with eight static cuts beside it, six weights at full width plus Bold and Black at `wdth` 80.
+- **Px Grotesk (proportional), Regular 400 or Bold 700:** the casual face for app UI and blog-style copy, not the logo.
+- **Berkeley Mono:** website copy.
+- Condensed cuts, Black weights and wide tracking: rejected for the logo.
 
 ## Metrics
 
-Cap height is **0.68 em in every Px Grotesk cut and in Berkeley Mono**, so they compare fairly at the same font size with no optical normalisation. Px Grotesk Mono's advance width is **0.60 em**, which defines one character cell.
+Measured from the font files by `src/type.mjs`, all as fractions of the em.
 
-## Optical spacing
+| Face | Cell (advance) | Cap height | x-height | Tallest lowercase |
+| --- | --- | --- | --- | --- |
+| Berkeley Mono Bold | 0.60 | 0.68 | 0.53 | 0.734 (d), 0.728 (l) |
+| Geist Mono Medium / Bold | 0.60 | 0.71 | 0.53 / 0.54 | 0.71 |
+| Px Grotesk Mono Bold | **0.62** | 0.68 | 0.51 | 0.68 |
 
-Px Grotesk Mono is monospaced, so **there is no kerning to fix**: every advance is already 0.60 em. Optical spacing is therefore a single global tracking decision, not a per-pair one.
+Round five assumed Px Grotesk Mono's cell was 0.60 em. It is 0.62.
 
-The operator's original wordmark reads at roughly tracking 0. Slight positive tracking, **+1.5 to +3 px at 52px (0.03 to 0.06 em)**, opens the counters of the double-l and the `r` without breaking the machined rhythm. Past +6 it reads as a spaced-out label rather than a wordmark.
+Berkeley Mono's ascenders rise above its capitals; Geist's and Px's stop at cap height. So at matched cap height, Berkeley's lowercase word stands slightly taller.
 
-## Lockup mathematics
+## The em, the cell, and tracking, plainly
 
-Derived from type metrics, not eyeballed.
+- **Em.** Every letter is drawn on an invisible card. The font size is the card's height: at 42px type, 1 em = 42px. Letters do not fill the card; Berkeley Mono's tallest lowercase letter uses 0.73 of it. Lockup numbers are given in em so they scale with the type. The em has no fixed vertical position: in these faces the space above and below the baseline adds up to 1.2 to 1.3 em.
+- **Cell.** In a monospace face every card is also the same width. That width is the character cell. A letter sits inside its cell with a small empty margin each side, its side bearing.
+- **Tracking.** Extra space after every letter. It widens the word and changes nothing else: not the em, the cell, the icon or the gap.
 
-- **Icon height = 1.00 em.** At 54px type the icon is a 54px tile, which is 48 grid units. This ties the tile directly to the type size, and since cap height is 0.68 em, the icon overshoots the cap band top and bottom by an equal 0.16 em, which optically centres it against the word.
-- **Gap = one character cell = 0.60 em.** In a monospace lockup this keeps the icon on the same rhythm as the letters: the icon occupies a whole cell of its own.
-- **Vertical alignment is cap-centred, not baseline-sat.** The icon's centre matches the centre of the cap band.
-- **Unit conversion:** one icon grid unit = `fontSize / 48` px. At 54px type, a 6-unit frame renders 6.75px.
+## Lockup rules (round six)
 
-Alternatives rendered for comparison: icon at 1.18 em (cap + ascender + descender), icon at exactly cap height (0.68 em), and gap at half a cell.
+Three numbers, all in em of the wordmark's font size:
 
-## Wordmark lockup
+1. **Icon height.**
+2. **Gap, measured from the icon's edge to the first letter's ink.** Round five measured to the start of the first cell, which silently added the `a`'s side bearing (0.08 em in Berkeley Mono). Measuring to the ink makes the visible gap the chosen one, and identical across faces.
+3. **Vertical centring on ink.** The middle of the word's ink, from the top of its tallest letter to the baseline, sits on the middle of the icon. This is the operator's own rule. Round four placed the baseline 54px under a 68px icon at 42px type, which left the word 4.8px low (7% of the icon); the operator saw it as "a little bit low".
 
-Preferred form, per the operator: **period leading line two.**
+The round four favourite, measured: **icon 1.62 em** (68px at 42px), **gap 0.94 em to the ink** (36px to the cell plus the 3.5px side bearing), which is **1.57 cells**. Round six holds these numbers for every typeface and icon comparison. That 1.62 is close to the golden ratio is a coincidence of 68 and 42, not a rule.
+
+Round five's options, for the record: the operator preferred icon = 1 em among 1, 1.18 and 0.68 em, with a framed icon in Px Grotesk Mono, and gap = 1 cell over half a cell. The round six spacing sheet sweeps icon size (1 to 1.62 em) and gap (0.75 to 1.75 cells) around the favourite.
+
+Comparisons across faces match **cap height**: each face is sized so its capitals would equal Berkeley Mono's at the same nominal size, and the icon and gap are held in pixels.
+
+## Wordmark forms
+
+Preferred stacked form, per the operator: **period leading line two.**
 
 ```
 altered
 .computer
 ```
 
-Reads as "altered" then "dot computer". The second line running two characters longer is treated as a deliberate brutalist overhang. A simplified variant with no TLD is also required.
+Reads as "altered" then "dot computer". The second line running two characters longer is a deliberate brutalist overhang. Kept as the text-only asset, in Berkeley Mono Bold, leading to be tuned (round four used 1.14 em baseline to baseline). Round six adds a hanging variant: line two moved left one cell so the `c` sits under the `a`.
 
-Rejected: the period trailing line one (`altered.` over `computer`), despite its 8-character symmetry, and the single-line form with a square period.
+A simplified single word, `altered`, is also required.
 
-The square-period substitution from earlier rounds is no longer needed now that the real typeface is in use.
+Rejected: the period trailing line one (`altered.` over `computer`), and the single line with a square period.
+
+## Licensing
+
+Full licence: Px Grotesk Regular and Bold, Px Grotesk Mono Regular. **Px Grotesk Mono Bold is trial-only**; the operator will buy it if it wins. Berkeley Mono was supplied by the operator. Geist Mono and JetBrains Mono are SIL Open Font License. All are in `fonts/`; see `PIPELINE.md`.

@@ -1,5 +1,19 @@
 # Brand Decisions
 
+## The brief
+
+From the operator's first message, which started the work. Kept because later rounds keep returning to it.
+
+- **Aesthetic:** brutalist, minimalist, technical. Thick, bold, square lines, with most of the icon filled rather than negative space, like Raycast's icon. Square origins, "like concrete brutalism"; at most very softly rounded corners, and square for now. The icon may be wider than tall.
+- **Geometry:** "geometrically proportionate and explainable by proportions and perfect angles". Every dimension should have a reason. The operator is not a trained designer and wants each proportion explained.
+- **Inspiration:** Pierre Computer Company (pierre.computer) for the markdown-style minimal website and brand feel, without copying it. Raycast for the quality, precision and detail of the software itself. Dan Koe's old Kortex mark, the origin of the square container.
+- **Meaning:** ALTERED is a knowledge orchestration infrastructure platform. Thoughts are the base primitive; attributes are data points on thoughts; datasets are tags; systems are composable mini-apps for the mind, like Apple Shortcuts. The icon should be symbolic without being niche: candidates offered were capturing a thought, entropy in a box, transformation of data (in one end, out the other), compounding reuse, and noise into signal (Koa, the iMessage agent, gives founders clarity).
+- **The name:** the altered path in life. Self-teaching over school, building over employment, refusing an average result. Stylised ALTERED. Also an altered state of consciousness, which the app gives by organising, versioning and using thoughts.
+- **Lore, not furniture:** "knowledge orchestration infrastructure" abbreviates to KOI, and koi are the fish of yin and yang, which mirrors entropy against order. The operator's earlier app was Kyzn, after kaizen, continuous improvement. Both shape the geometry (duality, conversion, improvement) but must never appear literally: KOI collides with Koa, and a CJK glyph reads as unrelated signalling.
+- **Action, not decoration:** the mark must imply processing, transformation or input to output. A static object, such as a retro TV on its own, says nothing about outcomes.
+- **Exponential, personally:** the operator uses expo-out easing constantly and finds compounding and powers of two meaningful. That is why expoOut is locked.
+- **Why replace the old mark:** it looks good as a macOS menu bar icon but crude as a profile picture on a dark background, whatever the texture or shade.
+
 ## Domain
 
 Moving from `usealtered.com` to `altered.computer`. Decided; not yet executed.
@@ -81,3 +95,9 @@ Errors made and corrected during the work. Kept because they encode real constra
 - The `r` in the original wordmark is **not** mirrored. It is Px Grotesk Mono Bold's own letterform. An earlier round built a "reversed terminal" narrative on this misreading and it was retired.
 - An earlier "Px Grotesk Screen 800" specimen was a **silent font fallback to JetBrains Mono**. Cause: the face declares typographic family `Px Grotesk` / subfamily `Screen` in name IDs 16/17, so it registers under `Px Grotesk` and the requested family never matched. Fixed by flattening the name table; a fallback guard now fails the build instead of rendering the wrong face. See `PIPELINE.md`.
 - The "45 degree mirror" of an easing was first answered about the wrong diagonal and with the wrong function. The correct treatment is in `MARK.md`.
+- Round five's small-size cut re-derived X1 from each framed parent's bar and star instead of reusing X1's numbers, so X1, the operator's favourite, vanished from round five. Reuse a picked mark's exact parameters and assert they match.
+- Round five's lockup sheet centred the icon on the baseline instead of the cap band: `iconY = baseline - cap/2 - (icon - cap)/2` reduces to `baseline - icon/2`. Every row's icon sat visibly low.
+- Round five's spike anatomy sheet placed three 420px panels on a 1080px sheet; the third ran off the edge. `sheetkit.bounds()` now fails the build on overflow.
+- Round five's reconstruction of the original option-key mark was hand-placed and rendered its glyph outside its box. Do not hand-place reconstructions either.
+- Px Grotesk Mono's advance is **0.62 em**, not the 0.60 that round five's lockup maths assumed. Metrics are now read from the font files.
+- opentype.js 2's `toPathData` drops close-path commands at some coordinates and fills a letter's counter solid. `src/type.mjs` serialises glyph commands itself.

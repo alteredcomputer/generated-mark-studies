@@ -34,6 +34,13 @@ Practical notes for downstream use:
 | `marks-rN.mjs` | the mark definitions for round N |
 | `sheets-rN.mjs` | the contact sheets for round N |
 | `sheets-type.mjs` | the typeface specimens, appended to round 4 |
+| `glyph.mjs` | from round 6: the X1 family as one master glyph, its exact round-four preset, canon, and the tile and framed containers |
+| `type.mjs` | from round 6: outlines words from the font files and measures their ink and cells |
+| `lockup.mjs` | from round 6: icon plus word, placed by icon em, ink gap and ink centring |
+| `annotate.mjs` | construction-drawing primitives: dimension lines, anchors, X-ray outlines, grids |
+| `sheetkit.mjs` | shared sheet plumbing from round 6 on, including the overflow check |
+| `sheets-r6-*.mjs` | round 6's construction, ladder and type sheets; `sheets-r6.mjs` runs them |
+| `page-r6.mjs` | round 6's gallery page, with number tables written from the glyph objects |
 | `site.mjs` | assembles `site/` from every round |
 
 ```sh
@@ -47,9 +54,34 @@ deploy is a file copy. Without that stub Vercel finds the `build` script and run
 generator on its own machine, which has none of the system fonts, and every label in the
 gallery would be re-rendered in a fallback face.
 
-Rounds 1, 3, 4 and 5 rebuild byte-for-byte identical to what is committed. Round 2 does
-not, because its type studies use Archivo and Martian Mono as labelled stand-ins and those
-two are not in `fonts/`.
+Rounds 1, 3, 4 and 5 rebuild byte-for-byte identical to what is committed, now on any
+machine, because the label face is vendored. Round 2 does not, because its type studies use
+Archivo and Martian Mono as labelled stand-ins and those two are not in `fonts/`: after a full
+build, restore its sheets with `git checkout -- site/2/sheets`. Round 6 is deterministic.
+
+## Verifying a round before it ships
+
+1. `pnpm build`, then `git status`: only the round you meant to change should differ (plus
+   round 2, restored as above).
+2. Open every new PNG and look at it. Check nothing is cropped or off an edge, labels do not
+   collide, and each shape matches what its caption claims. The operator found three broken
+   sheets in round 5 that a look would have caught.
+3. Serve `site/` locally (`python3 -m http.server` in `site/`) and load the page at phone
+   width with Playwright: no horizontal scroll, every image loads.
+4. When a round reuses a picked mark, assert its paths equal the original's. Round 6 does this
+   for X1 in `src/glyph.mjs`'s `x1()`, checked against round 4.
+
+## Outlined type
+
+From round 6, wordmarks are not `<text>`. `src/type.mjs` reads each glyph's outline from the
+font file with opentype.js and emits one path, so a lockup cannot fall back to another face
+and its ink can be measured exactly. Two things it handles:
+
+- opentype.js 2's `toPathData` drops close-path commands at some coordinates, which fills a
+  letter's counter solid (the `d` in `altered` was the casualty). Glyph commands are
+  serialised by hand instead.
+- Monospace faces need no kerning, so glyphs are placed cell by cell with tracking added after
+  each, the way CSS `letter-spacing` does it.
 
 ## The font fallback trap
 
@@ -74,6 +106,8 @@ Every module that sets type now asserts its own cast: round 5 always did, and ro
 | `fonts/BerkeleyMono-*.ttf` | six static weights, 400 to 900, `wdth` 100 |
 | `fonts/BerkeleyMonoCond-*.ttf` | Bold and Black at `wdth` 80, the source's own Condensed instance |
 | `fonts/px/*.otf` | the Px Grotesk set: full-licence Regular and Bold, full-licence Mono Regular, Screen, and the trial cuts |
+| `fonts/geist-mono/*.ttf` | Geist Mono Regular, Medium, SemiBold and Bold from the `geist` 1.7.2 package, OFL |
+| `fonts/jetbrains-mono/*.ttf` | JetBrains Mono Regular and Bold from the official 2.304 release, OFL; the label face and the resvg default |
 
 The `.ttf` cuts and the Screen name fix are produced by `scripts/prepare-fonts.py`, which needs `pip install fonttools brotli`. It is idempotent and its outputs are committed, so it is a one-off rather than a build step. It is Python because fontTools is the only instancer available; the generator stays pure ES modules.
 
@@ -85,6 +119,6 @@ Three things it handles, each a trap that has already cost a render:
 
 `woff2` inputs need `flavor = None` before saving as `ttf`, or the file stays compressed and `resvg` will not read it out of a font directory.
 
-Two faces the sheets use are not in `fonts/`: JetBrains Mono, the UI face for every label, comes from system fonts, and round 2's Archivo and Martian Mono stand-ins are not vendored. `assertFaces` skips JetBrains Mono for that reason.
+Round 2's Archivo and Martian Mono stand-ins are the only faces the sheets use that are not in `fonts/`. `assertFaces` skips JetBrains Mono because it is the fallback itself, so its fingerprint is the fallback's.
 
 Px Grotesk Screen ships as a single cut with `usWeightClass` 800. Requests for Screen 400 and Screen 800 both resolve to that one file, which is correct, not a fallback.
