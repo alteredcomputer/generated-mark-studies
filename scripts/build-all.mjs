@@ -14,12 +14,13 @@ const ROUNDS = [
     ["3", "../src/sheets-r3.mjs"],
     ["4", "../src/sheets-r4.mjs"],
     ["4 (type)", "../src/sheets-type.mjs"],
-    ["5", "../src/sheets-r5.mjs"]
+    ["5", "../src/sheets-r5.mjs"],
+    ["6", "../src/sheets-r6.mjs"]
 ]
 
 mkdirSync(BUILD, { recursive: true })
 
-for (let r = 1; r <= 5; r++) {
+for (let r = 1; r <= 6; r++) {
     mkdirSync(sheets(r), { recursive: true })
     mkdirSync(svgs(r), { recursive: true })
 }
