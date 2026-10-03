@@ -14,7 +14,8 @@ const TILE = "#0A0A0A"
 const BG = "#141414"
 const MUTED = "#7A7A7A"
 
-const FONT = { fontDirs: ["/usr/share/fonts"], defaultFontFamily: "JetBrains Mono", loadSystemFonts: true }
+//  Shared with the guard so the vendored JetBrains Mono is found on any machine.
+import { FONT } from "./fontguard.mjs"
 
 const rasterize = (svg, width) => {
     const out = new Resvg(svg, { fitTo: { mode: "width", value: width }, font: FONT }).render()
