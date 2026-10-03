@@ -6,6 +6,7 @@ import { marks as marksV3, FAMILIES as FAMILIES_V3 } from "./marks-r3.mjs"
 import { marks as marksV4, FAMILIES as FAMILIES_V4 } from "./marks-r4.mjs"
 import { marks as marksV5, FAMILIES as FAMILIES_V5 } from "./marks-r5.mjs"
 import { renderMark as renderV2, SCHEMES } from "./render.mjs"
+import { page6 } from "./page-r6.mjs"
 
 import { SITE, sheets } from "./paths.mjs"
 
@@ -14,6 +15,7 @@ const SHEETS2 = sheets(2)
 const SHEETS3 = sheets(3)
 const SHEETS4 = sheets(4)
 const SHEETS5 = sheets(5)
+const SHEETS6 = sheets(6)
 
 const OUT = SITE
 
@@ -34,7 +36,7 @@ const CSS = `
   header { padding:28px 20px 20px; border-bottom:1px solid var(--line); }
   h1 { margin:0 0 8px; font-size:19px; letter-spacing:2px; font-weight:700; }
   p.lede { margin:0; font-size:13px; line-height:1.6; color:var(--mute); max-width:64ch; }
-  nav { display:flex; gap:8px; padding:14px 20px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg); z-index:5; }
+  nav { display:flex; flex-wrap:wrap; gap:8px; padding:14px 20px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg); z-index:5; }
   nav a { display:inline-block; padding:8px 14px; border:1px solid var(--line); font-size:12px; text-decoration:none; letter-spacing:1px; }
   nav a.on { background:var(--ink); color:var(--bg); border-color:var(--ink); }
   section { padding:26px 20px; border-bottom:1px solid var(--line); }
@@ -52,6 +54,14 @@ const CSS = `
   figcaption span { color:var(--mute); }
   .sheets img { width:100%; height:auto; display:block; border:1px solid var(--line); margin-bottom:18px; border-radius:4px; }
   footer { padding:24px 20px 60px; color:var(--mute); font-size:12px; line-height:1.7; }
+  section p { font-size:12.5px; line-height:1.7; color:var(--mute); max-width:78ch; }
+  section p b { color:var(--ink); font-weight:700; }
+  .tbl { overflow-x:auto; margin:6px 0 18px; }
+  table { border-collapse:collapse; font-size:12px; line-height:1.5; min-width:560px; }
+  th, td { text-align:left; padding:7px 12px 7px 0; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--mute); font-weight:400; }
+  td:first-child { color:var(--ink); white-space:nowrap; }
+  ol.open { font-size:12.5px; line-height:1.8; color:var(--mute); padding-left:20px; max-width:78ch; }
 `
 
 const nav = current => `
@@ -61,6 +71,7 @@ const nav = current => `
   <a href="/3/" class="${current === 3 ? "on" : ""}">ROUND 3</a>
   <a href="/4/" class="${current === 4 ? "on" : ""}">ROUND 4</a>
   <a href="/5/" class="${current === 5 ? "on" : ""}">ROUND 5</a>
+  <a href="/6/" class="${current === 6 ? "on" : ""}">ROUND 6</a>
 </nav>`
 
 const page = ({ title, lede, current, body }) => `<!doctype html>
@@ -75,7 +86,7 @@ const page = ({ title, lede, current, body }) => `<!doctype html>
 <header><h1>${title}</h1><p class="lede">${lede}</p></header>
 ${nav(current)}
 ${body}
-<footer>ALTERED / scratch studies. Not brand-final. Nothing here is committed to the repo.</footer>
+<footer>ALTERED / mark studies. Not brand-final. Generated from alteredcomputer/generated-mark-studies.</footer>
 </body>
 </html>`
 
@@ -151,6 +162,7 @@ const build = () => {
     mkdirSync(`${OUT}/3/sheets`, { recursive: true })
     mkdirSync(`${OUT}/4/sheets`, { recursive: true })
     mkdirSync(`${OUT}/5/sheets`, { recursive: true })
+    mkdirSync(`${OUT}/6/sheets`, { recursive: true })
 
     const s1 = readdirSync(SHEETS1).filter(f => f.endsWith(".png")).sort()
     const s2 = readdirSync(SHEETS2).filter(f => f.endsWith(".png")).sort()
@@ -256,7 +268,13 @@ const build = () => {
         })
     )
 
-    writeFileSync(`${OUT}/index.html`, `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/5/">`)
+    const s6 = readdirSync(SHEETS6).filter(f => f.endsWith(".png")).sort()
+
+    for (const f of s6) copyFileSync(`${SHEETS6}/${f}`, `${OUT}/6/sheets/${f}`)
+
+    writeFileSync(`${OUT}/6/index.html`, page({ title: page6.title, lede: page6.lede, current: 6, body: page6.body({ card: cardV3, sheetSection }) }))
+
+    writeFileSync(`${OUT}/index.html`, `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/6/">`)
 
     console.log(`site: r1 ${marksV1.length + wideMarks.length} marks/${s1.length} sheets · r2 ${marksV2.length}/${s2.length} · r3 ${marksV3.length}/${s3.length}`)
 }
